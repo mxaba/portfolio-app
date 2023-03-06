@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id" dir="ltr">
+{% load static %}
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+    <title>Sorry, This Page Can&#39;t Be Accessed</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link href="{% static 'img/favicon.png' %}" rel="icon">
+    <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+    <style type="text/css">
+        html, body {
+            height: 100%;
+        }
+
+        #page-wrapper {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        #success-box {
+            max-width: 800px;
+            height: auto;
+            border:1px solid #888;
+            border-radius: 5px;
+            background: #e9e8e6;
+            padding: 15px;
+        }
+
+        #success-box p {
+            font-size: 18px;
+        }
+
+        #success-box .btn-back {
+            font-weight: 600;
+            font-size: 16px;
+            padding: 10px 30px 12px 30px;
+            border: 0;
+            border-radius: 50px;
+            transition: 0.5s;
+            margin-top: 10px;
+            color: #fff;
+            background: #dc3545;
+        }
+
+        #success-box .btn-back:hover {
+            background: #c51b2c;
+        }
+    </style>
+</head>
+
+<body class="bg-dark">
+
+    <div id="page-wrapper">
+        <div id="success-box" class="content-block">
+            <div class="row">
+                <div class="col-lg-2 text-center">
+                    <p><i class="fa fa-exclamation-triangle fa-5x"></i><br/>Status Code: 403</p>
+                </div>
+                <div class="col-lg-10 text-center">
+                    <h3>OPPSSS!!!! Sorry...</h3>
+                    <p>Sorry, your access is denied due to security reasons of our server.
+                        <br/>Please go back to the previous page to continue browsing.</p>
+                    <a class="btn btn-back" href="javascript:history.back()">Go Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

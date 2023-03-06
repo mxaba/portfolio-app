@@ -1,0 +1,46 @@
+{% extends 'base/base.html' %}
+
+{% block body %}
+
+<main id="main">
+    <section id="resume" class="resume">
+        <div class="container">
+
+            <div class="section-title">
+                <h2>My Messages</h2>
+            </div>
+
+            <div class="row">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Sender</th>
+                            <th scope="col">Subject</th>
+                            <th scope="col">Data Sent</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for message in inbox %}
+                            {% if message.is_read %}
+                        <tr>
+                            {% else %}
+                        <tr style="font-weight: 800;">
+                            {% endif %}
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ message.name }}</td>
+                            <td><a href="{% url 'base:message' message.id %}">
+                                {{ message.subject }}</a></td>
+                            <td>{{ message.created }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </section>
+</main>
+
+{% endblock body %}

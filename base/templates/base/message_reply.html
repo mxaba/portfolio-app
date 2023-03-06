@@ -1,0 +1,37 @@
+{% extends 'base/base.html' %}
+
+{% block body %}
+
+<main id="main">
+    <section id="resume" class="resume">
+        <div class="container">
+
+            <div class="section-title">
+                <h2>Replying to: {{ message.name }}</h2>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="mb-4">
+                        <a href="{% url 'base:inbox' %}" class="btn btn-secondary btn-sm me-2 mb-4">&laquo; Go back to inbox</a>
+                    </div>
+
+                    <form method="post">  {% csrf_token %}
+                        <div class="mb-3">
+                            <input type="text" class="form-control" name="name" value="{{ message.name }}" hidden>
+                            <input type="email" class="form-control" name="email" value="{{ message.email }}" hidden>
+                            <input type="text" class="form-control" name="subject" value="{{ message.subject }}" hidden>
+
+                            <label for="reply" class="form-label">Write your reply here</label>
+                            <textarea class="form-control" id="reply" name="reply" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-2">Send Message</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</main>
+
+{% endblock body %}

@@ -1,0 +1,41 @@
+{% extends 'base/base.html' %}
+
+{% block body %}
+
+<main id="main">
+    <section id="resume" class="resume">
+        <div class="container">
+
+            <div class="section-title">
+                <h2>{{ message.subject }}</h2>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="mb-4">
+                        <a href="{% url 'base:inbox' %}" class="btn btn-secondary btn-sm me-2">&laquo; Go back to inbox</a>
+                        <a href="{% url 'base:message-reply' message.id %}" class="btn btn-primary btn-sm">Reply &raquo;</a>
+                    </div>
+
+                    <p><strong>Name:</strong> {{ message.name }}</p>
+                    <p><strong>Email:</strong> {{ message.email }}</p>
+                    <p><strong>Sent:</strong> {{ message.created }}</p>
+                    <hr>
+                    <p>{{ message.subject }}</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</main>
+
+{% endblock body %}
