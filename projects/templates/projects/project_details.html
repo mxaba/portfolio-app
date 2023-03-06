@@ -1,0 +1,53 @@
+{% extends 'base/base.html' %}
+
+{% block body %}
+{% load static %}
+
+<main id="main">
+    <section id="project-details" class="project-details">
+        <div class="container">
+            <div class="row justify-content-center">
+
+                <div class="col-lg-8 border rounded shadow-sm p-4">
+                    <div>
+                        <a href="{% url 'projects:projects' %}" class="btn-back btn-sm">&laquo; Back to Projects</a>
+                    </div>
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <img src="{{ project.imageURL }}" class="project-thumbnail">
+
+                    <div>
+                        {% for tag in project.tags.all %}
+                            <span class="tag">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <hr>
+
+                    <h1 class="project-title">{{ project.title }}</h1>
+
+                    <div class="project-author">
+                        <img class="author-pic" src="{% static 'img/profile-image.jpg' %}">
+                        <div>
+                            <p class="author-name">Mcebo </p>
+                            <p class="post-date">Posted: {{ project.created|date:"F d, Y" }}</p>
+                        </div>
+                    </div>
+
+                    <p>{{ project.content|safe }}</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</main>
+
+{% endblock body %}

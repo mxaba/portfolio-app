@@ -1,0 +1,84 @@
+{% extends 'base/base.html' %}
+{% block projectsactive %} active {% endblock projectsactive %}
+
+{% block body %}
+
+<main id="main">
+    <section id="project" class="project">
+        <div class="container">
+
+            <div class="section-title">
+                <h2>Projects</h2>
+                <p>Here are some of the projects which I have done so far.</p>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12 d-flex justify-content-center">
+                    <ul id="project-filters">
+                        <li class="{% if category is None %}active{% endif %}">
+                            <a href="{% url 'projects:projects' %}">All</a>
+                        </li>
+                        {% for tag in tags %}
+                        <li class="{% if tag.name == category %}active{% endif %}">
+                            <a href="{% url 'projects:projects' %}?q={{ tag.name }}">{{ tag.name }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row project-container justify-content-center">
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                {% for project in all_project %}
+                <div class="col-lg-4 col-md-6 project-item">
+                    <div class="card" style="width: 100%;">
+
+                        <div class="project-wrap">
+                            <img src="{{ project.imageURL }}" class="card-img-top img-fluid" alt="...">
+                        </div>
+
+                        <div class="card-footer py-4">
+                            <h5 class="card-text mb-3">
+                                <a href="{% url 'projects:project-details' project.slug %}">{{ project.title }}</a>
+                            </h5>
+
+                            {% if request.user.is_superuser %}
+                            <div class="mb-3">
+                                <a href="{% url 'projects:project-update' project.slug %}"> Edit </a> |
+                                <a href="{% url 'projects:project-delete' project.slug %}"> Delete </a>
+                            </div>
+                            {% endif %}
+
+                            <div class="border-top">
+                                {% for tag in project.tags.all %}
+                                    <span class="tag mt-3">{{ tag }}</span>
+                                {% endfor %}
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                {% empty %}
+                <div class="mt-4">
+                    <h3 class="text-center">No projects available.</h3>
+                </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+    </section>
+</main>
+
+{% endblock body %}
