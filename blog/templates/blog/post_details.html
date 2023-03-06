@@ -1,0 +1,113 @@
+{% extends 'base/base.html' %}
+
+{% block body %}
+{% load humanize %}
+
+<main id="main">
+    <section id="post-details" class="post-details">
+        <div class="container">
+            <div class="row justify-content-center">
+
+                <div class="col-lg-8 post-content-wrapper">
+                    <div>
+                        <a href="{% url 'blog:blog-home' %}" class="btn-back btn-sm">&laquo; Back to Posts</a>
+                    </div>
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <img src="{{ post.imageURL }}" class="post-thumbnail">
+
+                    <div>
+                        {% for category in post.categories.all %}
+                            <span class="category">{{ category }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <hr>
+
+                    <h1 class="post-title">{{ post.title }}</h1>
+
+                    <div class="post-author">
+                        <img class="author-pic" src="{{ post.author.profile.profile_pic.url }}">
+                        <div>
+                            <p class="author-name"><a href="{% url 'blog:user-posts' post.author %}">
+                                {{ post.author|upper }}</a></p>
+                            <p class="post-date">Posted: {{ post.created|date:"F d, Y" }}</p>
+                        </div>
+                    </div>
+
+                    <p>{{ post.content|safe }}</p>
+
+                    <div class="comment-section">
+                        <div class="row">
+                            <h2>Conversation{{ post.postcomment_set.all.count|pluralize }}
+                                ({{ post.postcomment_set.all.count }})</h2>
+
+                            <hr class="mb-4">
+                            {% if user.is_authenticated %}
+                                <form action="" method="post" class="mb-4"> {% csrf_token %}
+                                    <div class="form-group mb-3">
+                                        <input type="text" class="form-control" id="comment" name="comment"
+                                               placeholder="Leave a comment...">
+                                    </div>
+                                    <button type="submit" class="btn btn-outline-primary btn-sm">
+                                        Post Comment
+                                    </button>
+                                </form>
+                            {% else %}
+                                <div class="alert alert-warning">
+                                    <span class="mx-2 fs-5">
+                                        Please <a href="{% url 'login' %}"> Login</a> or
+                                        <a href="{% url 'registration' %}"> Create an account</a>
+                                        to post a comment.
+                                    </span>
+                                </div>
+                            {% endif %}
+                            <hr>
+
+                            {% for comment in post.postcomment_set.all %}
+                                <div class="comment">
+                                    <img class="author-pic" src="{{ comment.author.profile.profile_pic.url }}">
+                                    <div>
+                                        <p class="comment-author">
+                                            {{ comment.author }}: {{ comment.created|naturaltime }}</p>
+                                        <p class="comment-body">{{ comment.comment }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-lg-3 right-side-wrapper">
+                    <div class="featured-posts">
+                        <h4 style="font-weight: 600;"> Featured Posts</h4>
+                        <hr>
+                        {% for post in posts %}
+                            <div class="sidebar-item">
+                                <a href="{% url 'blog:post-details' post.slug %}">
+                                    <img src="{{ post.imageURL }}">
+                                    <div class="sidebar-item-body">
+                                        <strong>{{ post.title }}</strong>
+                                        <p>{{ post.sub_heading }}</p>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</main>
+
+{% endblock body %}

@@ -1,0 +1,88 @@
+{% extends 'base/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+
+<main id="main">
+    <section id="blog-post" class="blog-post">
+        <div class="container">
+
+            <div class="section-title">
+                <h2>Posts by {{ user }}</h2>
+            </div>
+
+            <div class="row post-container justify-content-center">
+
+                <div class="col-lg-4 col-md-4">
+                    <form id="searchForm" method="GET" class="p-4 bg-light border shadow-sm">
+		                {{ my_filter.form|crispy }}
+
+		                <input class="btn btn-outline-primary mt-2" type="submit" value="Search">
+	                </form>
+                </div>
+
+                <div class="col-lg-8 col-md-8 post-item">
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    {% for post in posts %}
+                    <div class="card mb-3 box" style="margin:auto;">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <div class="border-bottom">
+                                        <strong class="d-inline-block mb-1 me-2 text-primary">
+                                            <a href="{% url 'blog:user-posts' post.author %}">{{ post.author }}</a>
+                                        </strong>
+                                        <small class="text-muted me-2">{{ post.created|date:"F d, Y" }}</small>
+                                        {% if post.author == request.user %}
+                                            <a class="btn btn-secondary btn-sm my-1 me-2" role="button"
+                                            href="{% url 'blog:post-update' post.slug %}">Update</a>
+                                            <a class="btn btn-danger btn-sm my-1" role="button"
+                                            href="{% url 'blog:post-delete' post.slug %}">Delete</a>
+                                        {% endif %}
+                                    </div>
+                                    <h3 class="my-2">
+                                        <a href="{% url 'blog:post-details' post.slug %}">{{ post.title }}</a>
+                                    </h3>
+                                    <div class="mb-3">
+                                        {% for category in post.categories.all %}
+                                            <span class="category">{{ category }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    <p class="article-content">{{ post.sub_heading|truncatechars:300 }}</p>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 img-box">
+                                <img src="{{ post.imageURL }}" class="card-img" alt="..." height="200px">
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="mt-4">
+                        <h3 class="text-center">No Posts available.</h3>
+                    </div>
+                    {% endfor %}
+
+                    <div class="row my-4">
+                        <div>
+                            {% include 'blog/pagination.html' %}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+</main>
+
+{% endblock body %}
