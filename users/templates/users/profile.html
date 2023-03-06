@@ -1,0 +1,43 @@
+{% extends 'users/profile_sidebar.html' %}
+{% load crispy_forms_tags %}
+{% block profileactive %} active {% endblock profileactive %}
+
+{% block settings %}
+<div>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<div class="border-bottom">
+    <h3 id="public-profile-heading" class="Subhead-heading">Profile</h3>
+</div>
+
+<div class="clearfix gutter d-flex flex-shrink-0 flex-column-reverse flex-md-row mt-4">
+    <div class="col-12 col-md-8 pe-4 pb-4">
+        <form method="post" enctype="multipart/form-data" class="profile-form">
+            {% csrf_token %}
+            <div class="mb-4">
+                {{ user_update_form|crispy }}
+            </div>
+            <div class="mb-4">
+                {{ profile_update_form|crispy }}
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn-profile">Update profile</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-12 col-md-4 ps-4">
+        <strong class="d-block mb-2">Profile picture</strong>
+        <img src="{{ request.user.profile.profile_pic.url }}" width="200px" height="200px"
+             class="rounded-circle avatar-user avatar me-3">
+    </div>
+</div>
+{% endblock settings %}
