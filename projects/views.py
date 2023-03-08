@@ -32,25 +32,26 @@ def project_details(request, slug):
     return render(request, 'projects/project_details.html', context)
 
 
-@admin_only
+@login_required
 def project_create(request):
     form = ProjectForm()
 
-    print(form)
-    print(request)
+    print(request.user)
 
     if request.method == 'POST':
         form = ProjectForm(request.POST, request.FILES)
         print(form.is_valid())
         if form.is_valid():
+            instance = form.save(commit=False)
             instance = form.save()
             return redirect('projects:project-details', slug=instance.slug)
+        print(form.errors)
 
     context = {'form': form, 'section_title': 'Add Project'}
     return render(request, 'projects/project_form.html', context)
 
 
-@admin_only
+@login_required
 def project_update(request, slug):
     project = get_object_or_404(Project, slug=slug)
     form = ProjectForm(instance=project)
@@ -66,7 +67,7 @@ def project_update(request, slug):
     return render(request, 'projects/project_form.html', context)
 
 
-@admin_only
+@login_required
 def project_delete(request, slug):
     project = get_object_or_404(Project, slug=slug)
 

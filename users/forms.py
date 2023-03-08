@@ -22,6 +22,16 @@ class UserUpdateForm(forms.ModelForm):
         fields = ['first_name', 'last_name', 'email']
         labels = {'first_name': 'First Name', 'last_name': 'Last Name'}
 
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
+        if user:
+            try:
+                self.instance.profile
+            except Profile.DoesNotExist:
+                Profile.objects.create(user=user)
+
 
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:

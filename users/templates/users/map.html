@@ -1,34 +1,33 @@
 {% extends 'base/base.html' %}
 
-{% block body %}
-<main id="main">
-    <section id="project" class="project">
-        <div class="container">
-            <div id="map" style="height: 100vh;"></div>
+{% block content %}
 
-            <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
-            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
+<div id="mapid"></div>
 
-            <script>
-                var map = L.map('map').setView([0, 0], 2);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-                    maxZoom: 18
-                }).addTo(map);
+{% endblock %}
 
-                var user_locations = JSON.parse('{{ user_locations|safe }}');
+{% block scripts %}
 
-                for (var i = 0; i < user_locations.length; i++) {
-                    var username = user_locations[i][0];
-                    var latitude = user_locations[i][1];
-                    var longitude = user_locations[i][2];
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+      integrity="sha384-LlNn6U9NlUJvp6Uf8aM3w6qPJryAmpIe6gzWZpR1iRc9nL2bI2MYW8FGDIaSg7V5"
+      crossorigin=""/>
 
-                    if (latitude && longitude) {
-                        L.marker([latitude, longitude]).addTo(map).bindPopup(username);
-                    }
-                }
-            </script>
-        </div>
-    </section>
-</main>
-{% endblock body %}
+<!-- Leaflet JavaScript -->
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha384-EoQxuXO9gfuKT1OOfyXd94wcRXgEwGcdp+AdzIGJVPQuNlJCSeFEuJD7pd/KJf/1"
+        crossorigin=""></script>
+
+<script>
+    var mymap = L.map('mapid').setView([51.505, -0.09], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+    }).addTo(mymap);
+
+    {% for point in points %}
+    L.marker([{{ point.lat }}, {{ point.lng }}]).addTo(mymap);
+    {% endfor %}
+</script>
+
+{% endblock %}

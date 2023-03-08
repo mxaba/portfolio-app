@@ -4,10 +4,11 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from django.urls import reverse
 from django.utils.text import slugify
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 
 class Tag(models.Model):
-    id = models.UUIDField(primary_key=True, unique=True, default=uuid.uuid4, editable=False)
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=200)
     created = models.DateTimeField(auto_now_add=True)
 
@@ -29,12 +30,10 @@ class Project(models.Model):
     featured = models.BooleanField(default=False)
     tags = models.ManyToManyField(Tag)
     slug = models.SlugField(null=True, blank=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
-
-    # def get_absolute_url(self):
-    #     return reverse('projects:project-details', kwargs={'slug': self.slug})
 
     # handling empty image field error
     @property

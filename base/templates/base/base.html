@@ -60,12 +60,9 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="{% url 'profile' %}">Settings</a></li>
-
-                            {% if request.user.is_superuser %}
                             <li><a class="dropdown-item" href="{% url 'base:inbox' %}">
                                 Messages ({{ request.session.messages }})</a></li>
                             <li><a class="dropdown-item" href="{% url 'projects:project-create' %}">Add Project</a></li>
-                            {% endif %}
 
                             <li><a class="dropdown-item" href="{% url 'blog:post-create' %}">Add Post</a></li>
                             <li><a class="dropdown-item" href="{% url 'blog:user-posts' request.user %}">

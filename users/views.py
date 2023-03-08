@@ -6,22 +6,28 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
 
+from .models import Profile
+
+
 from .forms import CustomUserCreationForm, UserUpdateForm, ProfileUpdateForm
 from .decorators import *
 
 def map(request):
-    user_locations = []
-    for user in User.objects.all():
-        if user.profile.latitude and user.profile.longitude:
-            user_locations.append((user.username, user.profile.latitude, user.profile.longitude))
-    return render(request, 'users/map.html', {'user_locations': user_locations})
+    profiles = Profile.objects.all()
+    points = []
+    for profile in profiles:
+        if profile.location:
+            points.append({
+                'lat': profile.location.y,
+                'lng': profile.location.x,
+            })
+    return render(request, 'users/map.html', {'points': points})
 
 
 
 @unauthenticated_user
 def registration(request):
     form = CustomUserCreationForm()
-
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         email = request.POST.get('email')
@@ -40,6 +46,9 @@ def registration(request):
 
 @unauthenticated_user
 def login_user(request):
+    print('\n\n\n\n\n')
+    print(request.user)
+    print('login_user \n\n\n\n\n')
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -86,16 +95,17 @@ def password_change(request):
 
 @login_required
 def profile(request):
+    user = request.user
     if request.method == 'POST':
-        user_update_form = UserUpdateForm(request.POST, instance=request.user)
-        profile_update_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        user_update_form = UserUpdateForm(request.POST, instance=user)
+        profile_update_form = ProfileUpdateForm(request.POST, request.FILES, instance=user.profile)
         if user_update_form.is_valid() or profile_update_form.is_valid():
             user_update_form.save()
             profile_update_form.save()
             messages.success(request, f'Your account has been updated successfully!')
             return redirect('profile')
     else:
-        user_update_form = UserUpdateForm(instance=request.user)
-        profile_update_form = ProfileUpdateForm(instance=request.user.profile)
+        user_update_form = UserUpdateForm(instance=user)
+        profile_update_form = ProfileUpdateForm(instance=user.profile)
     context = {'user_update_form': user_update_form, 'profile_update_form': profile_update_form}
     return render(request, 'users/profile.html', context)

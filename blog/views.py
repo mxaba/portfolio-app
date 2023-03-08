@@ -81,7 +81,8 @@ def post_create(request):
     print(request.method)
 
     if request.method == 'POST':
-        form = PostForm(form.is_valid)
+        form = PostForm(request.POST, request.FILES)
+        print(form.is_valid())
         print(request.method)
         if form.is_valid():
             form.instance.author = request.user
