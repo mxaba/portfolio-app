@@ -7,7 +7,7 @@ from django.utils.text import slugify
 
 
 class Category(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.UUIDField(primary_key=True, unique=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=200)
     created = models.DateTimeField(auto_now_add=True)
 
