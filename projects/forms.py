@@ -21,20 +21,13 @@ class ProjectForm(forms.ModelForm):
         }
     
     def __init__(self, *args, **kwargs):
-        author = kwargs.pop('author', None)
+        self.request = kwargs.pop('request', None)
         super().__init__(*args, **kwargs)
-        if author:
-            self.fields['author'] = forms.ModelChoiceField(
-                queryset=User.objects.filter(pk=author.pk),
-                widget=forms.HiddenInput(),
-            )
-        else:
-            self.fields['author'] = forms.ModelChoiceField(
-                queryset=User.objects.all(),
-                widget=forms.Select(),
-            )
     
-    def save(self, *args, **kwargs):
-        if not self.instance.pk:
-            self.instance.author = kwargs.pop('author', None)
-        super().save(*args, **kwargs)
+    def save(self, commit=True):
+        project = super().save(commit=False)
+        if not project.author_id:
+            project.author = self.request.user
+        if commit:
+            project.save()
+        return project

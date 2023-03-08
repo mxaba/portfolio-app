@@ -39,11 +39,12 @@ def project_create(request):
     print(request.user)
 
     if request.method == 'POST':
-        form = ProjectForm(request.POST, request.FILES)
+        form = ProjectForm(request.POST, request.FILES, request=request)
         print(form.is_valid())
         if form.is_valid():
-            instance = form.save(commit=False)
+            form.instance.author = request.user
             instance = form.save()
+            print(instance)
             return redirect('projects:project-details', slug=instance.slug)
         print(form.errors)
 

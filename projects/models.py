@@ -31,6 +31,7 @@ class Project(models.Model):
     tags = models.ManyToManyField(Tag)
     slug = models.SlugField(null=True, blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    slug = models.SlugField(null=True, blank=True)
 
     def __str__(self):
         return self.title
