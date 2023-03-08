@@ -54,7 +54,6 @@ def login_user(request):
             if next_url == '' or next_url is None:
                 next_url = 'base:base-home'
             return redirect(next_url)
-            # return redirect('base:base-home')
         else:
             messages.error(request, 'Username OR Password is incorrect')
 

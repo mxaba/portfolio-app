@@ -1,4 +1,4 @@
-#!/Users/mxaba/Projects/Portfolio/myenv/bin/python3
+#!/Users/mxaba/Projects/Portfolio/myenv/bin/python3.11
 
 import sys
 

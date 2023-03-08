@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
 
     'base.apps.BaseConfig',
     'projects.apps.ProjectsConfig',
@@ -86,14 +87,13 @@ WSGI_APPLICATION = 'Portfolio.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.contrib.gis.db.backends.spatialite',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-# Heroku Postgresql Database:
-# import dj_database_url
-# db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
-# DATABASES['default'].update(db_from_env)
+
+SPATIALITE_LIBRARY_PATH='/usr/local/lib/mod_spatialite.dylib'
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
