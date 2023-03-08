@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
+from django.contrib.auth.models import User
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 
@@ -9,7 +10,9 @@ from .decorators import *
 
 
 def projects(request):
-    all_project = Project.objects.filter(active=True)
+    print(request.user)
+    user = get_object_or_404(User, username=request.user)
+    all_project = Project.objects.filter(active=True, author=user)
     tags = Tag.objects.all()
 
     category = request.GET.get('q')
@@ -25,7 +28,6 @@ def projects(request):
 
 
 def project_details(request, slug):
-    # project = Project.objects.filter(slug=slug).first()
     project = get_object_or_404(Project, slug=slug)
 
     context = {'project': project}
