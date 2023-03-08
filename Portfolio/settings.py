@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
+    'django.contrib.postgres',
 
     'base.apps.BaseConfig',
     'projects.apps.ProjectsConfig',
@@ -87,13 +88,20 @@ WSGI_APPLICATION = 'Portfolio.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.contrib.gis.db.backends.spatialite',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
+
     'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.spatialite',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'portfolio',
+        'USER': 'mxaba',
+        'PASSWORD': '',
+        'HOST': '127.0.0.1',
+        'PORT': '5432'
     }
 }
-
-SPATIALITE_LIBRARY_PATH='/usr/local/lib/mod_spatialite.dylib'
 
 
 # Password validation
